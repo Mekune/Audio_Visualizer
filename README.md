@@ -6,7 +6,7 @@ you need to install "PulseAudio" and his GUI "Pavucontrol" to emulate your devic
 
 web browsers have a security feature that means you can't launch functions such as the microphone without human intervention, so you have to return to the home page to get the audio visualizer to work.
 
-## install PulseAudio(Tool) & PavuControl(GUI)
+## Install PulseAudio(Tool) & PavuControl(GUI)
 
 ### Ubuntu/Debian
 
@@ -14,7 +14,7 @@ sudo apt install pulseaudio
 
 sudo apt install pavucontrol
 
-### Fedora
+###  Fedora
 
 sudo dnf install pulseaudio
 
@@ -26,7 +26,7 @@ sudo pacman -S pulseaudio
 
 sudo pacman -S pavucontrol
 
-### OpenSUSE
+### OpenSUSE
 
 sudo zypper install pulseaudio
 
@@ -36,7 +36,7 @@ sudo zypper install pavucontrol
 
 pavucontrol
 
-## How to emulate your device's audio output as a microphone input ?
+## How to emulate your device's audio output as a microphone input ?
 
 ### Method 1 - Real output Device
 
