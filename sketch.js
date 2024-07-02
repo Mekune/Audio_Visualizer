@@ -18,12 +18,40 @@ function setup() {
   // Initialiser l'analyseur FFT
   fft = new p5.FFT();
 
-  // Récupérer l'état du microphone depuis localStorage
+  // Appeler la fonction pour demander l'accès au microphone
+  setupMicrophone();
+}
+
+function setupMicrophone() {
+  // Vérifier si l'accès au microphone est déjà activé (par exemple, enregistré dans localStorage)
   let micEnabled = JSON.parse(localStorage.getItem("micEnabled"));
-  if (micEnabled) {
+
+  // Si l'accès n'est pas déjà activé ou enregistré, demander l'autorisation
+  if (!micEnabled && navigator.mediaDevices.getUserMedia) {
+    navigator.mediaDevices
+      .getUserMedia({ audio: true })
+      .then(function (stream) {
+        // Microphone accessible, faire quelque chose avec `stream`
+        mic = new p5.AudioIn();
+        mic.start();
+        fft.setInput(mic);
+
+        // Marquer que l'accès au microphone est activé dans localStorage
+        localStorage.setItem("micEnabled", true);
+      })
+      .catch(function (err) {
+        // L'utilisateur a refusé l'accès au microphone ou une erreur est survenue
+        console.error("Erreur lors de l'accès au microphone : " + err.message);
+      });
+  } else if (micEnabled) {
+    // Si l'accès est déjà activé, créer simplement l'objet p5.AudioIn et le connecter à FFT
     mic = new p5.AudioIn();
     mic.start();
     fft.setInput(mic);
+  } else {
+    console.log(
+      "getUserMedia n'est pas supporté par ce navigateur ou l'accès est déjà refusé."
+    );
   }
 }
 
