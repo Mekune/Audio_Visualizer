@@ -46,7 +46,7 @@ function draw() {
     if (particles[i].edges()) {
       particles.splice(i, 1); // Supprime la particule si elle sort de l'écran
     } else {
-      particles[i].update(amp > 230);
+      particles[i].update(amp > 220);
       particles[i].show();
     }
   }
