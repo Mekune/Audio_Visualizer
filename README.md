@@ -2,14 +2,17 @@
 
 you need to install "PulseAudio" and his GUI "Pavucontrol" to emulate your device's audio output as a microphone input so that the script listens to what your device hears
 
+## WARNING
+
+web browsers have a security feature that means you can't launch functions such as the microphone without human intervention, so you have to return to the home page to get the audio visualizer to work.
+
 ## install PulseAudio(Tool) & PavuControl(GUI)
 
 ### Ubuntu/Debian
 
 sudo apt install pulseaudio
 
-sudo apt install pavucontrol 
-
+sudo apt install pavucontrol
 
 ### Fedora
 
@@ -44,7 +47,8 @@ You need to have opened your ouput application like Youtube, Spotify to see him,
 ### Method 2 - Virtual output Device
 
 First create a virutal output :
- - pactl load-module module-null-sink sink_name=VirtualSink
+
+- pactl load-module module-null-sink sink_name=VirtualSink
 
 After that, set the application's output device to VirtualSink and the input device to Monitor of VirtualSink.
 
