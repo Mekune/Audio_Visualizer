@@ -1,21 +1,24 @@
+let fft;
+let particles = [];
 let mic;
-var fft;
-var particles = [];
-
-// function preload() {
-//   song = loadSound("song4.mp3");
-// }
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
   angleMode(DEGREES);
+
+  // Initialisation de l'analyseur FFT
   fft = new p5.FFT();
+
+  // Restaurer l'état du microphone depuis localStorage
   let micEnabled = JSON.parse(localStorage.getItem("micEnabled"));
   if (micEnabled) {
     mic = new p5.AudioIn();
     mic.start();
     fft.setInput(mic);
   }
+
+  // Nettoyage des ressources audio lorsque la page se ferme ou rafraîchit
+  window.addEventListener("beforeunload", cleanupAudio);
 }
 
 function draw() {
@@ -26,29 +29,28 @@ function draw() {
 
   translate(width / 2, height / 2);
 
-  fft.analyze();
-  var amp = fft.getEnergy(20, 200);
+  // Analyse FFT
+  let spectrum = fft.analyze();
+  let amp = fft.getEnergy(20, 200);
 
-  var wave = fft.waveform();
-
-  for (var t = -1; t <= 1; t += 2) {
+  // Dessin des formes basées sur le spectre audio
+  for (let t = -1; t <= 1; t += 2) {
     beginShape();
-    for (var i = 0; i < 181; i += 0.5) {
-      var index = floor(map(i, 0, 181, 0, wave.length - 1));
-
-      var r = map(wave[index], -1, 1, 150, 350);
-
-      var x = r * sin(i) * t;
-      var y = r * cos(i);
+    for (let i = 0; i < 181; i += 0.5) {
+      let index = floor(map(i, 0, 181, 0, spectrum.length - 1));
+      let r = map(spectrum[index], 0, 255, 150, 350);
+      let x = r * sin(i) * t;
+      let y = r * cos(i);
       vertex(x, y);
     }
     endShape();
   }
 
-  var p = new Particle();
+  // Gestion des particules
+  let p = new Particle();
   particles.push(p);
 
-  for (var i = particles.length - 1; i >= 0; i--) {
+  for (let i = particles.length - 1; i >= 0; i--) {
     if (particles[i].edges()) {
       particles.splice(i, 1); // Supprime la particule si elle sort de l'écran
     } else {
@@ -58,13 +60,10 @@ function draw() {
   }
 }
 
-// function mouseClicked() {
-//   if (song.isPlaying()) {
-//     song.pause();
-//     noLoop();
-//   } else {
-//     song.play();
-//     loop();
+// function cleanupAudio() {
+//   if (mic) {
+//     mic.stop();
+//     fft.setInput(null);
 //   }
 // }
 
@@ -73,34 +72,27 @@ class Particle {
     this.pos = p5.Vector.random2D().mult(250);
     this.vel = createVector(0, 0);
     this.acc = this.pos.copy().mult(random(0.0001, 0.00001));
-
     this.w = random(3, 5);
-
     this.color = [random(200, 255), random(200, 255), random(200, 255)];
   }
+
   update(cond) {
     this.vel.add(this.acc);
     this.pos.add(this.vel);
     if (cond) {
-      // Déplace la particule plus loin si la condition est vraie
-      this.pos.add(this.vel);
-      this.pos.add(this.vel);
-      this.pos.add(this.vel);
-      this.pos.add(this.vel);
+      this.pos.add(this.vel); // Ajoutez votre comportement conditionnel ici
     }
   }
+
   edges() {
-    if (
+    return (
       this.pos.x < -width / 2 ||
       this.pos.x > width / 2 ||
       this.pos.y < -height / 2 ||
       this.pos.y > height / 2
-    ) {
-      return true;
-    } else {
-      return false;
-    }
+    );
   }
+
   show() {
     noStroke();
     fill(this.color);
