@@ -10,31 +10,56 @@ web browsers have a security feature that means you can't launch functions such 
 
 ### Ubuntu/Debian
 
+```bash
 sudo apt install pulseaudio
+```
 
+```bash
 sudo apt install pavucontrol
+```
 
 ###  Fedora
 
+```bash
+
 sudo dnf install pulseaudio
+```
+
+```bash
 
 sudo dnf install pavucontrol
+```
 
 ### Arch / Manjaro
 
+```bash
+
 sudo pacman -S pulseaudio
+```
+
+```bash
 
 sudo pacman -S pavucontrol
+```
 
 ### OpenSUSE
 
+```bash
+
 sudo zypper install pulseaudio
+```
+
+```bash
 
 sudo zypper install pavucontrol
+```
 
 ### Start PavuControl(GUI)
 
+```bash
+
 pavucontrol
+```
 
 ## How to emulate your device's audio output as a microphone input ?
 
@@ -48,7 +73,10 @@ You need to have opened your ouput application like Youtube, Spotify to see him,
 
 First create a virutal output :
 
-- pactl load-module module-null-sink sink_name=VirtualSink
+```bash
+
+pactl load-module module-null-sink sink_name=VirtualSink
+```
 
 After that, set the application's output device to VirtualSink and the input device to Monitor of VirtualSink.
 
